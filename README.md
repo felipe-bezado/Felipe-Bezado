@@ -69,11 +69,7 @@ I integrate **Claude (Anthropic)** directly into production pipelines:
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=felipe-bezado&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=felipe-bezado&layout=compact&theme=tokyonight&hide_border=true&langs_count=6" />
+  <img src="https://streak-stats.demolab.com?user=felipe-bezado&theme=tokyonight&hide_border=true" />
 </p>
 
 ---
