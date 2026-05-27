@@ -1,20 +1,86 @@
-<h1 align="center">Hi 👋, I'm Felipe Bezado</h1>
-<h3 align="center">A newcomer Data Engineer</h3>
+<h1 align="center">Hey, I'm Felipe Bezado 👋</h1>
 
-- 🔭 I’m currently working in **Tangle Teezer BR**
+<h3 align="center">Data Engineer · GCP · Python · AI Pipelines</h3>
 
-- 🌱 I’m currently learning **GCP, SQL, Python, Airflow**
-
-<h3 align="left">Connect with me:</h3>
-<p align="left">
-<a href="https://linkedin.com/in/https://www.linkedin.com/in/felipe-bezado/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/felipe-bezado/" height="30" width="40" /></a>
+<p align="center">
+  Building production-grade data pipelines and AI-powered automation at <strong>RBBR</strong> — a Brazilian retail intelligence company.
 </p>
 
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://www.docker.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a> <a href="https://cloud.google.com" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/google_cloud/google_cloud-icon.svg" alt="gcp" width="40" height="40"/> </a> <a href="https://kubernetes.io" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/kubernetes/kubernetes-icon.svg" alt="kubernetes" width="40" height="40"/> </a> <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/2ae2a900d2f041da66e950e4d48052658d850630/icons/pandas/pandas-original.svg" alt="pandas" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://www.selenium.dev" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/detain/svg-logos/780f25886640cef088af994181646db2f6b1a3f8/svg/selenium-logo.svg" alt="selenium" width="40" height="40"/> </a> </p>
+<p align="center">
+  <a href="https://www.linkedin.com/in/felipe-bezado/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:felipe.bezado@rbbr.com.br">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
+</p>
 
-<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=felipe-bezado&show_icons=true&locale=en" alt="felipe-bezado" /></p>
+---
 
+## 🔧 What I Build
 
+I maintain **27 Cloud Run data pipeline jobs** that process sellout data from Brazilian retailers — covering the full lifecycle from ingestion to insight delivery.
 
+**Data domains I work across:**
+- 📦 **Sellout & Orders** — ingestion, goals tracking, BI reporting
+- 💸 **Finance & Pricing** — DRE automation, competitive price mapping, shadow auto-pricer
+- 📈 **Marketing & Analytics** — GA4 revenue, marketing performance, customer scoring
+- 🤖 **AI & ML** — sellout demand forecasting (LightGBM), churn prediction, Claude-powered sellout analysis
+- 🚚 **Logistics** — carrier tracking automation, order arrival monitoring (Mandaé, SGP, VTEX)
 
+---
+
+## 🛠️ Tech Stack
+
+**Cloud & Infrastructure**
+
+![GCP](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat-square&logo=google-cloud&logoColor=white)
+![Cloud Run](https://img.shields.io/badge/Cloud_Run-4285F4?style=flat-square&logo=google-cloud&logoColor=white)
+![BigQuery](https://img.shields.io/badge/BigQuery-669DF6?style=flat-square&logo=google-bigquery&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
+
+**Languages & Libraries**
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
+![LightGBM](https://img.shields.io/badge/LightGBM-2E7D32?style=flat-square&logo=python&logoColor=white)
+![Poetry](https://img.shields.io/badge/Poetry-60A5FA?style=flat-square&logo=poetry&logoColor=white)
+
+**Data & Integrations**
+
+![SAP HANA](https://img.shields.io/badge/SAP_HANA-0FAAFF?style=flat-square&logo=sap&logoColor=white)
+![VTEX](https://img.shields.io/badge/VTEX-F71963?style=flat-square&logo=vtex&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white)
+
+**AI**
+
+![Anthropic](https://img.shields.io/badge/Claude_API-CC785C?style=flat-square&logo=anthropic&logoColor=white)
+
+---
+
+## 🤖 AI-Powered Work
+
+I integrate **Claude (Anthropic)** directly into production pipelines:
+
+- **`client_sellout_ia`** — LLM-assisted sellout analysis per client
+- **`shadow_auto_pricer`** — AI-driven competitive pricing decisions
+- **`rbbr-marketplace`** — internal Claude Code plugin marketplace for the engineering team, with skills for deployments, pipeline debugging, and alerts
+
+---
+
+## 📊 GitHub Stats
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=felipe-bezado&show_icons=true&theme=github_dark&hide_border=true&include_all_commits=true" />
+</p>
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=felipe-bezado&layout=compact&theme=github_dark&hide_border=true&langs_count=6" />
+</p>
+
+---
+
+<p align="center">
+  <sub>🇧🇷 Based in Brazil · UTC-3</sub>
+</p>
