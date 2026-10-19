@@ -80,6 +80,10 @@ def span(run):
     return (run[1] - run[0]).days + 1
 
 
+def font_b64():
+    return base64.b64encode(FONT_FILE.read_bytes()).decode()
+
+
 def heart(x, y, px, fill):
     shape = [".XX.XX.", "XXXXXXX", "XXXXXXX", ".XXXXX.", "..XXX..", "...X..."]
     return "".join(
@@ -91,7 +95,7 @@ def heart(x, y, px, fill):
 
 
 def render(total, first_day, current, longest, today):
-    font = base64.b64encode(FONT_FILE.read_bytes()).decode()
+    font = font_b64()
     pink, cyan, yellow, purple, dim = "#ff2a6d", "#05d9e8", "#f9f871", "#b967ff", "#3a2a5e"
     w, h = 900, 250
     cur_days = span(current) if current else 0
@@ -106,7 +110,7 @@ def render(total, first_day, current, longest, today):
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
 <defs>
   <style>@font-face{{font-family:'PS2P';src:url(data:font/woff2;base64,{font}) format('woff2');}}
-  text{{font-family:'PS2P',monospace}} .s{{font-family:'Segoe UI',-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:600}}</style>
+  text{{font-family:'PS2P',monospace}}</style>
   <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0221"/><stop offset="1" stop-color="#241056"/></linearGradient>
   <filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/>
     <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -119,19 +123,19 @@ def render(total, first_day, current, longest, today):
 <text x="150" y="62" text-anchor="middle" font-size="11" fill="{cyan}">TOTAL XP</text>
 <text x="150" y="122" text-anchor="middle" font-size="34" fill="#fff" filter="url(#glow)">{total:,}</text>
 <text x="150" y="152" text-anchor="middle" font-size="9" fill="{cyan}">CONTRIBUTIONS</text>
-<text class="s" x="150" y="188" text-anchor="middle" font-size="13" fill="#c9c3ea">since {first_day.strftime("%b %Y")}</text>
+<text x="150" y="188" text-anchor="middle" font-size="9" fill="#c9c3ea">since {first_day.strftime("%b %Y")}</text>
 
 <text x="450" y="62" text-anchor="middle" font-size="11" fill="{yellow}">CURRENT COMBO</text>
 <text x="450" y="122" text-anchor="middle" font-size="44" fill="{yellow}" filter="url(#glow)">{cur_days}<animate attributeName="opacity" values="1;0.75;1" dur="1.6s" repeatCount="indefinite"/></text>
 <text x="450" y="152" text-anchor="middle" font-size="9" fill="{yellow}">{"DAY" if cur_days == 1 else "DAYS"} · {status}</text>
 {hearts}
-<text class="s" x="450" y="224" text-anchor="middle" font-size="12" fill="#c9c3ea">{cur_sub} · {GRACE_DAYS} grace days, 1 heart each</text>
+<text x="450" y="226" text-anchor="middle" font-size="8" fill="#c9c3ea">{cur_sub} · {GRACE_DAYS} grace days, 1 heart each</text>
 
 <text x="750" y="62" text-anchor="middle" font-size="11" fill="{pink}">HIGH SCORE</text>
 <text x="750" y="122" text-anchor="middle" font-size="34" fill="#fff" filter="url(#glow)">{best_days}</text>
 <text x="750" y="152" text-anchor="middle" font-size="9" fill="{pink}">DAY COMBO</text>
-<text class="s" x="750" y="188" text-anchor="middle" font-size="13" fill="#c9c3ea">{best_sub}</text>
-<text class="s" x="{w - 18}" y="{h - 12}" text-anchor="end" font-size="10" fill="#6d5fa0">updated {today:%Y-%m-%d}</text>
+<text x="750" y="188" text-anchor="middle" font-size="9" fill="#c9c3ea">{best_sub}</text>
+<text x="{w - 18}" y="{h - 10}" text-anchor="end" font-size="7" fill="#6d5fa0">updated {today:%Y-%m-%d}</text>
 </svg>
 """
 
@@ -242,6 +246,7 @@ def render_snake(days, today, start_offset=0.0):
         cells.append(rect)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
 <defs>
+  <style>@font-face{{font-family:'PS2P';src:url(data:font/woff2;base64,{font_b64()}) format('woff2');}} text{{font-family:'PS2P',monospace}}</style>
   <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0221"/><stop offset="1" stop-color="#241056"/></linearGradient>
   <filter id="glow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="2.5" result="b"/>
     <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -249,7 +254,7 @@ def render_snake(days, today, start_offset=0.0):
 </defs>
 <rect width="{w}" height="{h}" rx="14" fill="url(#bg)"/>
 <rect x="1.5" y="1.5" width="{w - 3}" height="{h - 3}" rx="13" fill="none" stroke="#b967ff" stroke-opacity="0.55" stroke-width="3"/>
-<text x="{x0}" y="24" font-family="'Courier New',monospace" font-weight="bold" font-size="13" fill="#05d9e8">SNAKE.EXE · {len(eaten_at)} BLOCKS TO EAT · GROWS +1 PER BLOCK</text>
+<text x="{x0}" y="25" font-size="10" fill="#05d9e8">SNAKE.EXE · {len(eaten_at)} BLOCKS TO EAT · GROWS +1 PER BLOCK</text>
 {''.join(cells)}
 <g clip-path="url(#board)" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path d="{path}" stroke="#05d9e8" stroke-width="9" stroke-dasharray="{arrays[0]}" stroke-dashoffset="{offsets[0]}" filter="url(#glow)">
@@ -260,7 +265,7 @@ def render_snake(days, today, start_offset=0.0):
     <animate attributeName="stroke-dashoffset" values="{';'.join(heads)}" {anim}/>
   </path>
 </g>
-<text x="{w - 18}" y="{h - 12}" text-anchor="end" font-family="'Courier New',monospace" font-size="10" fill="#6d5fa0">last 12 months · updated {today:%Y-%m-%d}</text>
+<text x="{w - 18}" y="{h - 10}" text-anchor="end" font-size="7" fill="#6d5fa0">last 12 months · updated {today:%Y-%m-%d}</text>
 </svg>
 """
 
