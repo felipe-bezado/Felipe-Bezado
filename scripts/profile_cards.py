@@ -1,7 +1,7 @@
 """Render the arcade profile cards from the GitHub contribution calendar.
 
-streak.svg: a streak survives up to GRACE_DAYS empty days in a row; the next empty day breaks it.
-snake.svg: a snake eats every contribution cell of the last year and grows one block per cell.
+streak.svg: a streak survives up to GRACE_DAYS empty weekdays in a row (weekends are free); the next one breaks it.
+snake.svg: a snake eats every contribution cell of the last year, grows one block per cell and never crosses itself.
 Usage: GITHUB_TOKEN=... python scripts/profile_cards.py <login> <out_dir>
 """
 import base64
@@ -9,6 +9,7 @@ import json
 import os
 import sys
 import urllib.request
+from collections import deque
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -56,12 +57,26 @@ def fetch_days(login, token, today):
     return days
 
 
+def is_weekend(d):
+    return d.weekday() >= 5
+
+
+def empty_workdays(after, before, days):
+    """Weekdays strictly between two dates with no contributions; weekends never cost a heart."""
+    d, n = after + timedelta(days=1), 0
+    while d < before:
+        if not is_weekend(d) and not days.get(d, 0):
+            n += 1
+        d += timedelta(days=1)
+    return n
+
+
 def streaks(days, today):
-    """Split active days into streaks, where a gap of more than GRACE_DAYS empty days breaks one."""
+    """Split active days into streaks, where more than GRACE_DAYS empty weekdays in a row break one."""
     active = sorted(d for d, c in days.items() if c > 0 and d <= today)
     runs = []
     for d in active:
-        if runs and (d - runs[-1][1]).days - 1 <= GRACE_DAYS:
+        if runs and empty_workdays(runs[-1][1], d, days) <= GRACE_DAYS:
             runs[-1][1] = d
             runs[-1][2] += 1
         else:
@@ -69,15 +84,21 @@ def streaks(days, today):
     current = None
     if runs:
         # Today is still playable, so an empty today does not cost a heart yet.
-        empty_since_last = (today - runs[-1][1]).days - (0 if days.get(today, 0) else 1)
-        if (today - runs[-1][1]).days - 1 <= GRACE_DAYS:
-            current = (*runs[-1], max(empty_since_last, 0))
-    longest = max(runs, key=lambda r: ((r[1] - r[0]).days, r[2], r[1]), default=None)
+        lost = empty_workdays(runs[-1][1], today, days)
+        if lost <= GRACE_DAYS:
+            current = (*runs[-1], lost)
+    longest = max(runs, key=lambda r: (combo_len(r, days), r[2], r[1]), default=None)
     return current, longest
 
 
-def span(run):
-    return (run[1] - run[0]).days + 1
+def combo_len(run, days):
+    """Days in the run, counting every weekday plus the weekend days that had contributions."""
+    d, n = run[0], 0
+    while d <= run[1]:
+        if not is_weekend(d) or days.get(d, 0):
+            n += 1
+        d += timedelta(days=1)
+    return n
 
 
 def font_b64():
@@ -94,17 +115,17 @@ def heart(x, y, px, fill):
     )
 
 
-def render(total, first_day, current, longest, today):
+def render(total, first_day, current, longest, today, days):
     font = font_b64()
     pink, cyan, yellow, purple, dim = "#ff2a6d", "#05d9e8", "#f9f871", "#b967ff", "#3a2a5e"
     w, h = 900, 250
-    cur_days = span(current) if current else 0
+    cur_days = combo_len(current, days) if current else 0
     lives = GRACE_DAYS - current[3] if current else 0
     hearts = "".join(
         heart(450 - (GRACE_DAYS * 34 - 8) // 2 + i * 34, 176, 4, pink if i < lives else dim) for i in range(GRACE_DAYS)
     )
     cur_sub = f"since {current[0]:%b %d, %Y}" if current else "insert coin to start a combo"
-    best_days = span(longest) if longest else 0
+    best_days = combo_len(longest, days) if longest else 0
     best_sub = f"{longest[0]:%b %d, %Y} - {longest[1]:%b %d, %Y}" if longest else "-"
     status = "COMBO ALIVE" if current and lives else ("LAST LIFE!" if current else "GAME OVER")
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
@@ -129,7 +150,7 @@ def render(total, first_day, current, longest, today):
 <text x="450" y="122" text-anchor="middle" font-size="44" fill="{yellow}" filter="url(#glow)">{cur_days}<animate attributeName="opacity" values="1;0.75;1" dur="1.6s" repeatCount="indefinite"/></text>
 <text x="450" y="152" text-anchor="middle" font-size="9" fill="{yellow}">{"DAY" if cur_days == 1 else "DAYS"} · {status}</text>
 {hearts}
-<text x="450" y="226" text-anchor="middle" font-size="8" fill="#c9c3ea">{cur_sub} · {GRACE_DAYS} grace days, 1 heart each</text>
+<text x="450" y="226" text-anchor="middle" font-size="8" fill="#c9c3ea">{cur_sub} · {GRACE_DAYS} grace workdays · weekends free</text>
 
 <text x="750" y="62" text-anchor="middle" font-size="11" fill="{pink}">HIGH SCORE</text>
 <text x="750" y="122" text-anchor="middle" font-size="34" fill="#fff" filter="url(#glow)">{best_days}</text>
@@ -141,7 +162,7 @@ def render(total, first_day, current, longest, today):
 
 
 PITCH, CELL, WEEKS = 15, 11, 53
-START_LEN, MAX_LEN, STEP_S, PAUSE_S = 3, 60, 0.09, 2.5
+START_LEN, MAX_LEN, STEP_S, PAUSE_S, MAX_STEPS, MAX_RUN_S = 3, 45, 0.09, 2.5, 4000, 40
 LEVELS = ["#1b0f3b", "#4a1a6b", "#8a1f7a", "#c2185b", "#ff2a6d"]
 
 
@@ -164,31 +185,103 @@ def level(count, counts):
     return 1 + min(int(q * 4 - 1e-9), 3)
 
 
+def neighbors(cell, board):
+    c, r = cell
+    for n in ((c + 1, r), (c - 1, r), (c, r + 1), (c, r - 1)):
+        if n in board:
+            yield n
+
+
+def bfs(start, goals, blocked, board):
+    """Shortest path (excluding start) from start to the nearest goal, avoiding blocked cells."""
+    prev, queue = {start: None}, deque([start])
+    while queue:
+        cur = queue.popleft()
+        if cur in goals and cur != start:
+            path = []
+            while cur != start:
+                path.append(cur)
+                cur = prev[cur]
+            return path[::-1]
+        for n in neighbors(cur, board):
+            if n not in prev and n not in blocked:
+                prev[n] = cur
+                queue.append(n)
+    return None
+
+
+def reachable(start, blocked, board):
+    seen, queue = {start}, deque([start])
+    while queue:
+        for n in neighbors(queue.popleft(), board):
+            if n not in seen and n not in blocked:
+                seen.add(n)
+                queue.append(n)
+    return len(seen)
+
+
+def advance(body, cell, grow):
+    body.append(cell)
+    if not grow:
+        body.popleft()
+
+
 def route(grid):
-    """Greedy nearest-target walk over the grid; returns head cells per step and the step each target is eaten."""
-    targets = {cell for cell, c in grid.items() if c}
-    pos, steps, eaten_at = (-START_LEN, 0), [], {}
-    for k in range(START_LEN + 1):
-        steps.append((-START_LEN + k, 0))
-    pos = steps[-1]
-    while targets:
-        nxt = min(targets, key=lambda t: (abs(t[0] - pos[0]) + abs(t[1] - pos[1]), t))
-        while pos[0] != nxt[0]:
-            pos = (pos[0] + (1 if nxt[0] > pos[0] else -1), pos[1])
-            steps.append(pos)
-            if pos in targets:
-                targets.discard(pos)
-                eaten_at[pos] = len(steps) - 1
-        while pos[1] != nxt[1]:
-            pos = (pos[0], pos[1] + (1 if nxt[1] > pos[1] else -1))
-            steps.append(pos)
-            if pos in targets:
-                targets.discard(pos)
-                eaten_at[pos] = len(steps) - 1
-    while pos[0] < WEEKS + START_LEN + 1 and len(eaten_at) == 0:
-        pos = (pos[0] + 1, pos[1])
-        steps.append(pos)
+    """Play real snake over the grid: never enter its own body, and only chase food it can escape from.
+
+    Returns the head cell per step and the step at which each contribution cell is eaten.
+    """
+    board, targets = set(grid), {cell for cell, c in grid.items() if c}
+    steps = [(-START_LEN + k, 0) for k in range(START_LEN + 1)]
+    body = deque(steps[1:])
+    eaten_at = {}
+    if steps[-1] in targets:
+        targets.discard(steps[-1])
+        eaten_at[steps[-1]] = len(steps) - 1
+
+    def eat_or_move(cell):
+        grow = cell in targets and len(body) < MAX_LEN
+        advance(body, cell, grow)
+        steps.append(cell)
+        if cell in targets:
+            targets.discard(cell)
+            eaten_at[cell] = len(steps) - 1
+
+    def safe(path):
+        sim = deque(body)
+        for cell in path:
+            advance(sim, cell, cell in targets and len(sim) < MAX_LEN)
+        tail = sim[0]
+        if tail not in board:  # still sliding onto the board
+            return True
+        return bfs(sim[-1], {tail}, set(sim) - {tail}, board) is not None
+
+    while targets and len(steps) < MAX_STEPS:
+        path = bfs(body[-1], targets, set(body), board)
+        if path and safe(path):
+            for cell in path:
+                eat_or_move(cell)
+            continue
+        # No safe food: stall towards the move that keeps the most free space around the head.
+        tail = body[0]
+        options = [n for n in neighbors(body[-1], board) if n not in body or n == tail]
+        if not options:
+            break
+        blocked = set(body) - {tail}
+        eat_or_move(max(options, key=lambda n: (reachable(n, blocked, board), n == tail)))
     return steps, eaten_at
+
+
+def collisions(steps, eaten_at):
+    """Replay a route and return the steps where the head entered its own body (must be empty)."""
+    body, hits = deque(steps[1:START_LEN + 1]), []
+    eat_steps = set(eaten_at.values())
+    for i in range(START_LEN + 1, len(steps)):
+        tail = body[0]
+        if steps[i] in body and steps[i] != tail:
+            hits.append(i)
+        advance(body, steps[i], i in eat_steps and len(body) < MAX_LEN)
+    return hits
 
 
 def render_snake(days, today, start_offset=0.0):
@@ -198,7 +291,7 @@ def render_snake(days, today, start_offset=0.0):
     counts = [c for c in grid.values() if c]
     steps, eaten_at = route(grid)
     n = len(steps) - 1
-    run_s = n * STEP_S
+    run_s = n * min(STEP_S, MAX_RUN_S / max(n, 1))
     total_s = run_s + PAUSE_S
     end_frac = run_s / total_s
     begin = f"-{start_offset:.2f}s" if start_offset else "0s"
@@ -217,7 +310,8 @@ def render_snake(days, today, start_offset=0.0):
     for i in range(START_LEN, n + 1):
         while eaten < len(eat_steps) and eat_steps[eaten] <= i:
             eaten += 1
-        length = PITCH * min(START_LEN + eaten, MAX_LEN)
+        # A little shorter than the body so the tail never visually touches the head.
+        length = PITCH * (min(START_LEN + eaten, MAX_LEN) - 0.6)
         dist = i * PITCH
         key_times.append((i - START_LEN) / (n - START_LEN) * end_frac if n > START_LEN else 0)
         offsets.append(f"{length - dist:.1f}")
@@ -276,7 +370,7 @@ def main():
     days = fetch_days(login, os.environ["GITHUB_TOKEN"], today)
     current, longest = streaks(days, today)
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "streak.svg").write_text(render(sum(days.values()), min(days), current, longest, today), encoding="utf-8")
+    (out_dir / "streak.svg").write_text(render(sum(days.values()), min(days), current, longest, today, days), encoding="utf-8")
     (out_dir / "snake.svg").write_text(render_snake(days, today), encoding="utf-8")
     print(f"total={sum(days.values())} current={current} longest={longest}")
 
