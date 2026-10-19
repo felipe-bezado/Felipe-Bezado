@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://www.linkedin.com/in/felipe-bezado/"><img src="https://img.shields.io/badge/LinkedIn-PLAYER_2%3F_JOIN_IN-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=0d0221"/></a>
-  <img src="https://komarev.com/ghpvc/?username=felipe-bezado&label=VISITORS&color=ff2a6d&style=for-the-badge" alt="visitors"/>
+  <img src="https://hits.sh/github.com/felipe-bezado.svg?style=for-the-badge&label=VISITORS&color=ff2a6d&labelColor=0d0221" alt="visitors"/>
 </p>
 
 ---

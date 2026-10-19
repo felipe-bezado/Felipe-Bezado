@@ -139,7 +139,7 @@
   <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" dur="1.1s" repeatCount="indefinite"/>
 </g>
 <text x="872" y="286" text-anchor="end" font-size="12" font-weight="bold" fill="#05d9e8" opacity="0.8">CREDIT 01</text>
-<text x="28" y="286" font-size="12" font-weight="bold" fill="#05d9e8" opacity="0.8">© 2026 BEZADO SOFT</text>
+<text x="28" y="286" font-size="12" font-weight="bold" fill="#05d9e8" opacity="0.8">© 2026 BEZADO ENTERTAINMENT SYSTEM</text>
 
 <rect width="900" height="300" rx="14" fill="url(#scan)" pointer-events="none"/>
 <rect x="1.5" y="1.5" width="897" height="297" rx="13" fill="none" stroke="#b967ff" stroke-opacity="0.55" stroke-width="3"/>
