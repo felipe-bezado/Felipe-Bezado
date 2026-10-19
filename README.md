@@ -131,7 +131,7 @@ I'm a **Data Engineer** at a Brazilian retail-intelligence company. My realm: a 
 </p>
 
 <p align="center">
-  <img src="https://streak-stats.demolab.com?user=felipe-bezado&theme=radical&hide_border=true&background=0d0221" alt="streak stats"/>
+  <img src="https://raw.githubusercontent.com/felipe-bezado/Felipe-Bezado/output/streak.svg" alt="contribution streak with 3 grace days" width="100%"/>
 </p>
 
 <details>
