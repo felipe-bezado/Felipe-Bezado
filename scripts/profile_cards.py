@@ -1,7 +1,7 @@
 """Render the arcade profile cards from the GitHub contribution calendar.
 
 streak.svg: a streak survives up to GRACE_DAYS empty weekdays in a row (weekends are free); the next one breaks it.
-snake.svg: a snake eats every contribution cell of the last year, grows one block per cell and never crosses itself.
+snake.svg: a snake eats the contribution cells of the last year, grows one block per cell with no cap, never crosses itself, and shows STAGE CLEAR or GAME OVER when the run ends.
 Usage: GITHUB_TOKEN=... python scripts/profile_cards.py <login> <out_dir>
 """
 import base64
@@ -162,7 +162,7 @@ def render(total, first_day, current, longest, today, days):
 
 
 PITCH, CELL, WEEKS = 15, 11, 53
-START_LEN, MAX_LEN, STEP_S, PAUSE_S, MAX_STEPS, MAX_RUN_S = 3, 45, 0.09, 2.5, 4000, 40
+START_LEN, MAX_LEN, STEP_S, PAUSE_S, MAX_STEPS, MAX_RUN_S = 3, 10_000, 0.09, 2.5, 6000, 40
 LEVELS = ["#1b0f3b", "#4a1a6b", "#8a1f7a", "#c2185b", "#ff2a6d"]
 
 
@@ -302,6 +302,10 @@ def render_snake(days, today, start_offset=0.0):
     def cy(r):
         return y0 + r * PITCH + CELL / 2
 
+    food = sum(1 for c in grid.values() if c)
+    cleared = len(eaten_at) == food
+    end_msg = f"STAGE CLEAR · {food}/{food}" if cleared else f"GAME OVER · SCORE {len(eaten_at)}/{food}"
+    end_col = "#39ff14" if cleared else "#ff2a6d"
     path = "M" + " L".join(f"{cx(c):.1f} {cy(r):.1f}" for c, r in steps)
     gap = n * PITCH + 2000
     eat_steps = sorted(eaten_at.values())
@@ -348,7 +352,7 @@ def render_snake(days, today, start_offset=0.0):
 </defs>
 <rect width="{w}" height="{h}" rx="14" fill="url(#bg)"/>
 <rect x="1.5" y="1.5" width="{w - 3}" height="{h - 3}" rx="13" fill="none" stroke="#b967ff" stroke-opacity="0.55" stroke-width="3"/>
-<text x="{x0}" y="25" font-size="10" fill="#05d9e8">SNAKE.EXE · {len(eaten_at)} BLOCKS TO EAT · GROWS +1 PER BLOCK</text>
+<text x="{x0}" y="25" font-size="10" fill="#05d9e8">SNAKE.EXE · {food} BLOCKS TO EAT · GROWS +1 PER BLOCK</text>
 {''.join(cells)}
 <g clip-path="url(#board)" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path d="{path}" stroke="#05d9e8" stroke-width="9" stroke-dasharray="{arrays[0]}" stroke-dashoffset="{offsets[0]}" filter="url(#glow)">
@@ -358,6 +362,11 @@ def render_snake(days, today, start_offset=0.0):
   <path d="{path}" stroke="#f9f871" stroke-width="11" stroke-dasharray="0.01 {gap}" stroke-dashoffset="{heads[0]}">
     <animate attributeName="stroke-dashoffset" values="{';'.join(heads)}" {anim}/>
   </path>
+</g>
+<g opacity="0">
+  <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;{end_frac:.5f};{min(end_frac + 0.01, 1):.5f};1" dur="{total_s:.2f}s" begin="{begin}" repeatCount="indefinite"/>
+  <rect x="{w / 2 - 190}" y="{h / 2 - 26}" width="380" height="44" rx="6" fill="#0d0221" fill-opacity="0.85" stroke="{end_col}" stroke-width="2"/>
+  <text x="{w / 2}" y="{h / 2 + 3}" text-anchor="middle" font-size="14" fill="{end_col}">{end_msg}</text>
 </g>
 <text x="{w - 18}" y="{h - 10}" text-anchor="end" font-size="7" fill="#6d5fa0">last 12 months · updated {today:%Y-%m-%d}</text>
 </svg>
