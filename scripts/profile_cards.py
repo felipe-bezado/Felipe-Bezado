@@ -1,7 +1,8 @@
-"""Render an arcade-style contribution streak card with grace days.
+"""Render the arcade profile cards from the GitHub contribution calendar.
 
-A streak survives up to GRACE_DAYS empty days in a row; the next empty day breaks it.
-Usage: GITHUB_TOKEN=... python scripts/streak_card.py <login> <out.svg>
+streak.svg: a streak survives up to GRACE_DAYS empty days in a row; the next empty day breaks it.
+snake.svg: a snake eats every contribution cell of the last year and grows one block per cell.
+Usage: GITHUB_TOKEN=... python scripts/profile_cards.py <login> <out_dir>
 """
 import base64
 import json
@@ -135,13 +136,143 @@ def render(total, first_day, current, longest, today):
 """
 
 
+PITCH, CELL, WEEKS = 15, 11, 53
+START_LEN, MAX_LEN, STEP_S, PAUSE_S = 3, 60, 0.09, 2.5
+LEVELS = ["#1b0f3b", "#4a1a6b", "#8a1f7a", "#c2185b", "#ff2a6d"]
+
+
+def calendar_grid(days, today):
+    """Last 53 weeks as {(col, row): count}, Sunday-first like GitHub's graph."""
+    first = today - timedelta(days=(today.weekday() + 1) % 7 + 7 * (WEEKS - 1))
+    grid = {}
+    d = first
+    while d <= today:
+        grid[((d - first).days // 7, (d - first).days % 7)] = days.get(d, 0)
+        d += timedelta(days=1)
+    return grid
+
+
+def level(count, counts):
+    if not count:
+        return 0
+    ranked = sorted(counts)
+    q = sum(c <= count for c in ranked) / len(ranked)
+    return 1 + min(int(q * 4 - 1e-9), 3)
+
+
+def route(grid):
+    """Greedy nearest-target walk over the grid; returns head cells per step and the step each target is eaten."""
+    targets = {cell for cell, c in grid.items() if c}
+    pos, steps, eaten_at = (-START_LEN, 0), [], {}
+    for k in range(START_LEN + 1):
+        steps.append((-START_LEN + k, 0))
+    pos = steps[-1]
+    while targets:
+        nxt = min(targets, key=lambda t: (abs(t[0] - pos[0]) + abs(t[1] - pos[1]), t))
+        while pos[0] != nxt[0]:
+            pos = (pos[0] + (1 if nxt[0] > pos[0] else -1), pos[1])
+            steps.append(pos)
+            if pos in targets:
+                targets.discard(pos)
+                eaten_at[pos] = len(steps) - 1
+        while pos[1] != nxt[1]:
+            pos = (pos[0], pos[1] + (1 if nxt[1] > pos[1] else -1))
+            steps.append(pos)
+            if pos in targets:
+                targets.discard(pos)
+                eaten_at[pos] = len(steps) - 1
+    while pos[0] < WEEKS + START_LEN + 1 and len(eaten_at) == 0:
+        pos = (pos[0] + 1, pos[1])
+        steps.append(pos)
+    return steps, eaten_at
+
+
+def render_snake(days, today, start_offset=0.0):
+    w, h = 900, 175
+    x0, y0 = (w - WEEKS * PITCH) // 2, 38
+    grid = calendar_grid(days, today)
+    counts = [c for c in grid.values() if c]
+    steps, eaten_at = route(grid)
+    n = len(steps) - 1
+    run_s = n * STEP_S
+    total_s = run_s + PAUSE_S
+    end_frac = run_s / total_s
+    begin = f"-{start_offset:.2f}s" if start_offset else "0s"
+
+    def cx(c):
+        return x0 + c * PITCH + CELL / 2
+
+    def cy(r):
+        return y0 + r * PITCH + CELL / 2
+
+    path = "M" + " L".join(f"{cx(c):.1f} {cy(r):.1f}" for c, r in steps)
+    gap = n * PITCH + 2000
+    eat_steps = sorted(eaten_at.values())
+    key_times, offsets, arrays, heads = [], [], [], []
+    eaten = 0
+    for i in range(START_LEN, n + 1):
+        while eaten < len(eat_steps) and eat_steps[eaten] <= i:
+            eaten += 1
+        length = PITCH * min(START_LEN + eaten, MAX_LEN)
+        dist = i * PITCH
+        key_times.append((i - START_LEN) / (n - START_LEN) * end_frac if n > START_LEN else 0)
+        offsets.append(f"{length - dist:.1f}")
+        arrays.append(f"{length:.1f} {gap}")
+        heads.append(f"{-dist:.1f}")
+    key_times.append(1)
+    offsets.append(offsets[-1])
+    arrays.append(arrays[-1])
+    heads.append(heads[-1])
+    kt = ";".join(f"{t:.5f}" for t in key_times)
+    anim = f'dur="{total_s:.2f}s" begin="{begin}" repeatCount="indefinite" keyTimes="{kt}"'
+
+    cells = []
+    for (c, r), count in sorted(grid.items()):
+        col = LEVELS[level(count, counts)]
+        rect = f'<rect x="{x0 + c * PITCH}" y="{y0 + r * PITCH}" width="{CELL}" height="{CELL}" rx="2" fill="{col}"'
+        if (c, r) in eaten_at:
+            te = (eaten_at[(c, r)] - START_LEN) / (n - START_LEN) * end_frac
+            rect += (
+                f'><animate attributeName="fill" values="{col};{LEVELS[0]};{LEVELS[0]}" '
+                f'keyTimes="0;{te:.5f};1" calcMode="discrete" dur="{total_s:.2f}s" begin="{begin}" '
+                'repeatCount="indefinite"/></rect>'
+            )
+        else:
+            rect += "/>"
+        cells.append(rect)
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0221"/><stop offset="1" stop-color="#241056"/></linearGradient>
+  <filter id="glow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="2.5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <clipPath id="board"><rect x="{x0 - 6}" y="{y0 - 6}" width="{WEEKS * PITCH + 8}" height="{7 * PITCH + 8}"/></clipPath>
+</defs>
+<rect width="{w}" height="{h}" rx="14" fill="url(#bg)"/>
+<rect x="1.5" y="1.5" width="{w - 3}" height="{h - 3}" rx="13" fill="none" stroke="#b967ff" stroke-opacity="0.55" stroke-width="3"/>
+<text x="{x0}" y="24" font-family="'Courier New',monospace" font-weight="bold" font-size="13" fill="#05d9e8">SNAKE.EXE · {len(eaten_at)} BLOCKS TO EAT · GROWS +1 PER BLOCK</text>
+{''.join(cells)}
+<g clip-path="url(#board)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="{path}" stroke="#05d9e8" stroke-width="9" stroke-dasharray="{arrays[0]}" stroke-dashoffset="{offsets[0]}" filter="url(#glow)">
+    <animate attributeName="stroke-dashoffset" values="{';'.join(offsets)}" {anim}/>
+    <animate attributeName="stroke-dasharray" values="{';'.join(arrays)}" {anim}/>
+  </path>
+  <path d="{path}" stroke="#f9f871" stroke-width="11" stroke-dasharray="0.01 {gap}" stroke-dashoffset="{heads[0]}">
+    <animate attributeName="stroke-dashoffset" values="{';'.join(heads)}" {anim}/>
+  </path>
+</g>
+<text x="{w - 18}" y="{h - 12}" text-anchor="end" font-family="'Courier New',monospace" font-size="10" fill="#6d5fa0">last 12 months · updated {today:%Y-%m-%d}</text>
+</svg>
+"""
+
+
 def main():
-    login, out = sys.argv[1], Path(sys.argv[2])
+    login, out_dir = sys.argv[1], Path(sys.argv[2])
     today = datetime.now(TZ).date()
     days = fetch_days(login, os.environ["GITHUB_TOKEN"], today)
     current, longest = streaks(days, today)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render(sum(days.values()), min(days), current, longest, today), encoding="utf-8")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "streak.svg").write_text(render(sum(days.values()), min(days), current, longest, today), encoding="utf-8")
+    (out_dir / "snake.svg").write_text(render_snake(days, today), encoding="utf-8")
     print(f"total={sum(days.values())} current={current} longest={longest}")
 
 

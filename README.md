@@ -120,14 +120,10 @@ I'm a **Data Engineer** at a Brazilian retail-intelligence company. My realm: a 
   <img src="assets/achievements.svg" alt="Achievements: Thousand PR Club, Cloud Tamer, AI Whisperer, 90% Club, Penny Pincher, Gatekeeper, Toolsmith, Second Brain" width="100%"/>
 </p>
 
-## 🐍 Bonus stage: the snake eats my contributions
+## 🐍 Bonus stage: the snake eats my contributions (and grows)
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipe-bezado/Felipe-Bezado/output/github-snake-dark.svg"/>
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipe-bezado/Felipe-Bezado/output/github-snake.svg"/>
-    <img alt="snake eating the contribution graph" src="https://raw.githubusercontent.com/felipe-bezado/Felipe-Bezado/output/github-snake-dark.svg"/>
-  </picture>
+  <img src="https://raw.githubusercontent.com/felipe-bezado/Felipe-Bezado/output/snake.svg" alt="snake that grows as it eats the contribution graph" width="100%"/>
 </p>
 
 <p align="center">
