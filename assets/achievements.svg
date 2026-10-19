@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="290" viewBox="0 0 900 290" font-family="'Courier New', Courier, monospace">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0d0221"/><stop offset="1" stop-color="#241056"/>
+  </linearGradient>
+  <filter id="glow" x="-20%" y="-50%" width="140%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+    <rect width="4" height="2" fill="#000" opacity="0.18"/>
+  </pattern>
+  <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+    <stop offset="0.5" stop-color="#fff" stop-opacity="0.25"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+</defs>
+<rect width="900" height="290" rx="14" fill="url(#bg)"/>
+
+<circle cx="408" cy="167" r="1.6" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.6s" begin="-3.4s" repeatCount="indefinite"/></circle>
+<circle cx="177" cy="235" r="1.6" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.1s" begin="-3.2s" repeatCount="indefinite"/></circle>
+<circle cx="93" cy="95" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.8s" begin="-3.6s" repeatCount="indefinite"/></circle>
+<circle cx="568" cy="177" r="1.6" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.9s" begin="-2.6s" repeatCount="indefinite"/></circle>
+<circle cx="552" cy="54" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.6s" begin="-0.3s" repeatCount="indefinite"/></circle>
+<circle cx="41" cy="256" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.4s" begin="-1.3s" repeatCount="indefinite"/></circle>
+<circle cx="530" cy="65" r="1" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.1s" begin="-2.0s" repeatCount="indefinite"/></circle>
+<circle cx="593" cy="138" r="1.2" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" begin="-2.2s" repeatCount="indefinite"/></circle>
+<circle cx="830" cy="33" r="1.2" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.3s" begin="-0.9s" repeatCount="indefinite"/></circle>
+<circle cx="264" cy="30" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" begin="-3.4s" repeatCount="indefinite"/></circle>
+<circle cx="350" cy="278" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.0s" begin="-3.7s" repeatCount="indefinite"/></circle>
+<circle cx="56" cy="115" r="1.6" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" begin="-2.3s" repeatCount="indefinite"/></circle>
+<circle cx="185" cy="199" r="1.2" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.7s" begin="-1.3s" repeatCount="indefinite"/></circle>
+<circle cx="858" cy="222" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.8s" begin="-2.8s" repeatCount="indefinite"/></circle>
+<circle cx="20" cy="140" r="1.6" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.9s" begin="-2.2s" repeatCount="indefinite"/></circle>
+<circle cx="404" cy="63" r="1" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" begin="-1.5s" repeatCount="indefinite"/></circle>
+<circle cx="357" cy="287" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.2s" begin="-3.9s" repeatCount="indefinite"/></circle>
+<circle cx="717" cy="95" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="2.0s" begin="-1.6s" repeatCount="indefinite"/></circle>
+<circle cx="762" cy="190" r="0.8" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.6s" begin="-0.6s" repeatCount="indefinite"/></circle>
+<circle cx="399" cy="13" r="1.2" fill="#fff"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.6s" begin="-1.5s" repeatCount="indefinite"/></circle>
+<text x="30" y="44" font-size="20" font-weight="bold" fill="#f9f871" letter-spacing="3">ACHIEVEMENTS UNLOCKED · 8/8</text>
+<line x1="30" y1="56" x2="870" y2="56" stroke="#b967ff" stroke-opacity="0.5" stroke-dasharray="6 6"/>
+
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.333;1" dur="0.60s" begin="0s" fill="freeze"/>
+  <clipPath id="c0"><rect x="30" y="76" width="200" height="92" rx="8"/></clipPath>
+  <rect x="30" y="76" width="200" height="92" rx="8" fill="#14052e" stroke="#f9f871" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="44" y="126" font-size="30">🏆</text>
+  <text x="88" y="110" font-size="13" font-weight="bold" fill="#f9f871">THOUSAND PR CLUB</text>
+  <text x="88" y="130" font-size="11" fill="#c9c3ea"><tspan x="88" dy="0">1,349 PRs merged</tspan></text>
+  <g clip-path="url(#c0)"><rect x="-60" y="76" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="-60;260;260" keyTimes="0;0.35;1" dur="4.8s" begin="0.0s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.529;1" dur="0.85s" begin="0s" fill="freeze"/>
+  <clipPath id="c1"><rect x="246" y="76" width="200" height="92" rx="8"/></clipPath>
+  <rect x="246" y="76" width="200" height="92" rx="8" fill="#14052e" stroke="#05d9e8" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="260" y="126" font-size="30">☁️</text>
+  <text x="304" y="110" font-size="13" font-weight="bold" fill="#05d9e8">CLOUD TAMER</text>
+  <text x="304" y="130" font-size="11" fill="#c9c3ea"><tspan x="304" dy="0">59 jobs &amp;</tspan><tspan x="304" dy="14">services shipped</tspan></text>
+  <g clip-path="url(#c1)"><rect x="156" y="76" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="156;476;476" keyTimes="0;0.35;1" dur="4.8s" begin="0.6s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.636;1" dur="1.10s" begin="0s" fill="freeze"/>
+  <clipPath id="c2"><rect x="462" y="76" width="200" height="92" rx="8"/></clipPath>
+  <rect x="462" y="76" width="200" height="92" rx="8" fill="#14052e" stroke="#ff2a6d" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="476" y="126" font-size="30">🤖</text>
+  <text x="520" y="110" font-size="13" font-weight="bold" fill="#ff2a6d">AI WHISPERER</text>
+  <text x="520" y="130" font-size="11" fill="#c9c3ea"><tspan x="520" dy="0">Claude inside prod</tspan><tspan x="520" dy="14">pipelines</tspan></text>
+  <g clip-path="url(#c2)"><rect x="372" y="76" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="372;692;692" keyTimes="0;0.35;1" dur="4.8s" begin="1.2s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.704;1" dur="1.35s" begin="0s" fill="freeze"/>
+  <clipPath id="c3"><rect x="678" y="76" width="200" height="92" rx="8"/></clipPath>
+  <rect x="678" y="76" width="200" height="92" rx="8" fill="#14052e" stroke="#39ff14" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="692" y="126" font-size="30">🧪</text>
+  <text x="736" y="110" font-size="13" font-weight="bold" fill="#39ff14">90% CLUB</text>
+  <text x="736" y="130" font-size="11" fill="#c9c3ea"><tspan x="736" dy="0">test coverage,</tspan><tspan x="736" dy="14">every job</tspan></text>
+  <g clip-path="url(#c3)"><rect x="588" y="76" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="588;908;908" keyTimes="0;0.35;1" dur="4.8s" begin="1.8s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.750;1" dur="1.60s" begin="0s" fill="freeze"/>
+  <clipPath id="c4"><rect x="30" y="184" width="200" height="92" rx="8"/></clipPath>
+  <rect x="30" y="184" width="200" height="92" rx="8" fill="#14052e" stroke="#f9f871" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="44" y="234" font-size="30">💸</text>
+  <text x="88" y="218" font-size="13" font-weight="bold" fill="#f9f871">PENNY PINCHER</text>
+  <text x="88" y="238" font-size="11" fill="#c9c3ea"><tspan x="88" dy="0">-55% idle dashboard</tspan><tspan x="88" dy="14">cost</tspan></text>
+  <g clip-path="url(#c4)"><rect x="-60" y="184" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="-60;260;260" keyTimes="0;0.35;1" dur="4.8s" begin="2.4s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.784;1" dur="1.85s" begin="0s" fill="freeze"/>
+  <clipPath id="c5"><rect x="246" y="184" width="200" height="92" rx="8"/></clipPath>
+  <rect x="246" y="184" width="200" height="92" rx="8" fill="#14052e" stroke="#b967ff" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="260" y="234" font-size="30">🔐</text>
+  <text x="304" y="218" font-size="13" font-weight="bold" fill="#b967ff">GATEKEEPER</text>
+  <text x="304" y="238" font-size="11" fill="#c9c3ea"><tspan x="304" dy="0">one SSO for 10+</tspan><tspan x="304" dy="14">internal apps</tspan></text>
+  <g clip-path="url(#c5)"><rect x="156" y="184" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="156;476;476" keyTimes="0;0.35;1" dur="4.8s" begin="3.0s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.810;1" dur="2.10s" begin="0s" fill="freeze"/>
+  <clipPath id="c6"><rect x="462" y="184" width="200" height="92" rx="8"/></clipPath>
+  <rect x="462" y="184" width="200" height="92" rx="8" fill="#14052e" stroke="#05d9e8" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="476" y="234" font-size="30">🛠️</text>
+  <text x="520" y="218" font-size="13" font-weight="bold" fill="#05d9e8">TOOLSMITH</text>
+  <text x="520" y="238" font-size="11" fill="#c9c3ea"><tspan x="520" dy="0">built a 10-plugin</tspan><tspan x="520" dy="14">dev marketplace</tspan></text>
+  <g clip-path="url(#c6)"><rect x="372" y="184" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="372;692;692" keyTimes="0;0.35;1" dur="4.8s" begin="3.6s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+<g>
+  <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.830;1" dur="2.35s" begin="0s" fill="freeze"/>
+  <clipPath id="c7"><rect x="678" y="184" width="200" height="92" rx="8"/></clipPath>
+  <rect x="678" y="184" width="200" height="92" rx="8" fill="#14052e" stroke="#ff2a6d" stroke-opacity="0.8" stroke-width="2"/>
+  <text x="692" y="234" font-size="30">🧠</text>
+  <text x="736" y="218" font-size="13" font-weight="bold" fill="#ff2a6d">SECOND BRAIN</text>
+  <text x="736" y="238" font-size="11" fill="#c9c3ea"><tspan x="736" dy="0">Obsidian vault</tspan><tspan x="736" dy="14">wired to AI memory</tspan></text>
+  <g clip-path="url(#c7)"><rect x="588" y="184" width="60" height="92" fill="url(#shine)">
+    <animate attributeName="x" values="588;908;908" keyTimes="0;0.35;1" dur="4.8s" begin="4.2s" repeatCount="indefinite"/>
+  </rect></g>
+</g>
+
+<rect width="900" height="290" rx="14" fill="url(#scan)" pointer-events="none"/>
+<rect x="1.5" y="1.5" width="897" height="287" rx="13" fill="none" stroke="#b967ff" stroke-opacity="0.55" stroke-width="3"/>
+</svg>
