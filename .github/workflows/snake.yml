@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v4
+
       - uses: Platane/snk@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
             dist/github-snake.svg
             dist/github-snake-dark.svg?palette=github-dark&color_snake=#05d9e8&color_dots=#161b22,#3b0a45,#7a1a6b,#c2185b,#ff2a6d
-
-      - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
